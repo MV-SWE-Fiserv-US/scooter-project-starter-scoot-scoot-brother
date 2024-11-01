@@ -3,6 +3,8 @@ const Scooter = require("../src/Scooter.js");
 const User = require("../src/User.js");
 
 describe("Scooter", () => {
+  let testScooterNew;
+  let testScooterDocked;
   let testScooterInUse;
   let testScooterBroken;
   let testUser1;
@@ -10,6 +12,8 @@ describe("Scooter", () => {
   let testUser3;
 
   beforeEach(() => {
+    testScooterNew = new Scooter("Central Park");
+    testScooterDocked = new Scooter("Union Station");
     testScooterInUse = new Scooter("Union Station");
     testScooterLowCharge = new Scooter("Convention Center");
     testScooterBroken = new Scooter("Convention Center");
@@ -25,6 +29,11 @@ describe("Scooter", () => {
     testScooterBroken.isBroken = true;
   });
 
+  describe("Scooter properties", () => {
+    it("should have a station property with a string value of location if docked", () => {
+      expect(testScooterDocked).toHaveProperty("station", "Union Station");
+    });
+
     it("should have a station property with a null value if checked out", () => {
       expect(testScooterInUse).toHaveProperty("station", null);
     });
@@ -33,10 +42,38 @@ describe("Scooter", () => {
       expect(testScooterInUse).toHaveProperty("user", testUser1);
     });
 
+    it("should have a user property with a null value if docked", () => {
+      expect(testScooterDocked.user).toBeNull();
+    });
+
+    it("should have a serial property with a number value", () => {
+      expect(testScooterDocked).toHaveProperty("serial", 22);
+    });
+
     it("should have a nextSerial static property with a number value starting at 1 and incrementing for each instance of Scooter created", () => {
       expect(Scooter.nextSerial).toBe(31);
     });
 
+    it("should have a charge property with a number value from 0 to 100", () => {
+      expect(testScooterDocked).toHaveProperty("charge", 100);
+    });
+
+    it("should have a isBroken property with a boolean value", () => {
+      expect(testScooterDocked).toHaveProperty("isBroken", false);
+    });
+
+    it("should start off docked - valid string station and null user", () => {
+      expect(testScooterNew.station).toBe("Central Park");
+      expect(testScooterNew.user).toBeNull();
+    });
+
+    it("should start off fully charged - with a charge value of 100", () => {
+      expect(testScooterNew.charge).toBe(100);
+    });
+
+    it("should start off in good condition - with a isBroken value of false", () => {
+      expect(testScooterNew.isBroken).toBe(false);
+    });
   });
 
   describe("Scooter methods", () => {
@@ -87,3 +124,4 @@ describe("Scooter", () => {
       });
     });
   });
+});
